@@ -1,4 +1,5 @@
 <!-- TODO: Header? -->
+<%= include('partials/header') %>
 <div class="main-content">
     <h1>Active Polls</h1>
     <!-- This is an example of how you can render the polls on the page, you're welcome to keep it or change it if you wish. This page isn't fully complete though -->
@@ -13,7 +14,7 @@
                         </li>
                     <% } %>
                 </ul>
-                <form class="poll-form button-container">
+                <form class="poll-form button-container" method="POST">
                     <% for (let { answer } of poll.options) { %>
                         <button class="action-button vote-button" type="submit" value="<%= answer %>" name="poll-option">
                             Vote for <%= answer %>

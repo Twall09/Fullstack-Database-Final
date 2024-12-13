@@ -6,7 +6,7 @@
     "start": "node --watch-path=./ index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Matthew English",
+  "author": "Tyler Wall",
   "license": "MIT",
   "description": "",
   "dependencies": {

@@ -1,11 +1,14 @@
 <!-- TODO: Header? -->
 
+<%= include('partials/header') %>
+
 <div class="main-content">
-    <h1>Sign Up</h1>
+    <h1>Sign Up Here!</h1>
+    <!-- added styling for error message here -->
     <form action="/signup" method="post" style="width: 300px;">
         <% if (errorMessage) { %>
-            <p class="error-message"><%= errorMessage %></p>
-        <% } %>
+            <p style="color: red;"><%= errorMessage %></p>
+        <% } %>  
         <div class="form-input-container">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
