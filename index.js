@@ -143,7 +143,7 @@ app.get("/authenticated", async (request, response) => {
 
   response.render("authenticatedIndex", {
     user: request.session.user, // should pass 'user' so u can view nav links in header.ejs
-    polls: polls || [],
+    polls,
   });
 
   //TODO: Fix the polls, this should contain all polls that are active. I'd recommend taking a look at the
