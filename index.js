@@ -20,7 +20,7 @@ app.use(
   session({
     secret: "voting-app-secret",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
   })
 );
 
@@ -72,7 +72,7 @@ app.ws("/ws", (socket, request) => {
 
 // gets and post routes
 app.get("/", async (request, response) => {
-  const pollCount = await Poll.countPolls();
+  const pollCount = await Poll.countDocuments();
   if (request.session.user?.id) {
     return response.redirect("/authenticated");
   }
@@ -137,11 +137,11 @@ app.get("/authenticated", async (request, response) => {
   }
 
   const polls = await Poll.find();
-  if (!polls) {
-    response.render("index/authenticatedIndex", { polls: [] });
-  }
 
-  response.render("index/authenticatedIndex", { polls });
+  response.render("index/authenticatedIndex", {
+    user: request.session.user, // should pass 'user' so u can view nav links in header.ejs
+    polls: polls || [],
+  });
 
   //TODO: Fix the polls, this should contain all polls that are active. I'd recommend taking a look at the
   //authenticatedIndex template to see how it expects polls to be represented

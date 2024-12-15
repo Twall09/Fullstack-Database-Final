@@ -4,9 +4,10 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login Here!</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <%= include('../partials/header') %>
+    <%= include('/partials/header') %>
     <h1>Login Here!</h1>
     <form action="/login" method="POST">
       <label for="username">Username</label>
@@ -21,7 +22,7 @@
       <button type="submit">Login</button>
     </form>
 
-    <!-- added styling for error message here -->
+    <!-- Added styling for error message here -->
     <% if (errorMessage) { %>
     <p style="color: red"><%= errorMessage %></p>
     <% } %>

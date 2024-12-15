@@ -165,3 +165,42 @@ button.action-button:hover {
   color: rgba(93, 142, 251, 0.8);
   cursor: pointer;
 }
+
+header {
+  background-color: #282c34;
+  padding: 10px 0;
+}
+
+header nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+header nav a {
+  color: white;
+  text-decoration: none;
+  font-size: 18px;
+  padding: 8px 16px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+header nav a:hover {
+  background-color: #4caf50;
+  color: white;
+  border-radius: 5px;
+}
+
+header nav form button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+header nav form button:hover {
+  background-color: #e60000;
+}
