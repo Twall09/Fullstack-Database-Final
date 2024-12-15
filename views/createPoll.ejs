@@ -1,11 +1,11 @@
 <!-- TODO: Header? -->
-<%= include('partials/header') %>
+<%= include('../partials/header') %>
 <body>
     <div class="main-content">
         <h1>Create a New Poll</h1>
         <form action="/createPoll" method="POST">
             <div class="form-input-container">
-                <label for="question">Poll Question:</label>
+                <label for="question">Question:</label>
                 <input type="text" id="question" name="question" required>
             </div>
             <div class="form-input-container">

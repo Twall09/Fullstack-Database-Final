@@ -4,8 +4,6 @@ const path = require("path");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const bcrypt = require("bcrypt");
-const { type } = require("os");
-const { request } = require("http");
 
 const PORT = 3000;
 //TODO: Update this URI to match your own MongoDB setup
@@ -76,7 +74,7 @@ app.ws("/ws", (socket, request) => {
 app.get("/", async (request, response) => {
   const pollCount = await Poll.countPolls();
   if (request.session.user?.id) {
-    return response.redirect("/dashboard");
+    return response.redirect("/authenticated");
   }
 
   response.render("index/unauthenticatedIndex", { pollCount });
@@ -84,7 +82,7 @@ app.get("/", async (request, response) => {
 
 app.get("/login", async (request, response) => {
   if (request.session.user?.id) {
-    return response.redirect("/dashboard");
+    return response.redirect("/authenticated");
   }
   response.render("login", { errorMessage: null });
 });
@@ -95,7 +93,7 @@ app.post("/login", async (request, response) => {
 
   if (user && (await bcrypt.compare(password, user.password))) {
     request.session.user = { id: user._id, username: user.username };
-    return response.redirect("/dashboard");
+    return response.redirect("/authenticated");
   }
   response.render("login", {
     errorMessage: "Invaklid username or password. Try again.",
@@ -104,7 +102,7 @@ app.post("/login", async (request, response) => {
 
 app.get("/signup", async (request, response) => {
   if (request.session.user?.id) {
-    return response.redirect("/dashboard"); // all these mean return to dashboard
+    return response.redirect("/authenticated"); // all these mean return to dashboard
   }
 
   return response.render("signup", { errorMessage: null });
@@ -121,11 +119,11 @@ app.post("/signup", async (request, response) => {
   } catch (error) {
     response.render("signup", {
       errorMessage: "Error during login. Try again.",
-    }); // added a validation
+    }); // validation
   }
 });
 
-// because the header.ejs requires a logout option, i have to add a post method for loggigng out.
+// because the header.ejs requires a logout option, i added a post method for loggigng out.
 
 app.post("/logout", (request, response) => {
   request.session.destroy(() => {
@@ -133,9 +131,9 @@ app.post("/logout", (request, response) => {
   });
 });
 
-app.get("/dashboard", async (request, response) => {
+app.get("/authenticated", async (request, response) => {
   if (!request.session.user?.id) {
-    return response.redirect("/");
+    return response.redirect("/login");
   }
 
   const polls = await Poll.find();
@@ -150,8 +148,8 @@ app.get("/dashboard", async (request, response) => {
 });
 
 app.get("/profile", async (request, response) => {
-  if (!request.session.user?.id) {
-    return response.redirect("/");
+  if (!request.session.user) {
+    return response.redirect("/login");
   }
 
   const username = request.session.user.username;

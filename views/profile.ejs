@@ -6,11 +6,11 @@
     <title>Profile Page</title>
   </head>
   <body>
-    <%= include('partials/header') %>
+    <%= include('../partials/header') %>
     <h1>Profile Page</h1>
     <p>Username: <%= username %></p>
     <p>Number of polls voted in: <%= votedCount %></p>
-    <a href="/dashboard">Go Back to Dashboard</a>
+    <a href="/authenticated">Go Back to Dashboard</a>
     <a href="/logout">Log Out</a>
   </body>
 </html>

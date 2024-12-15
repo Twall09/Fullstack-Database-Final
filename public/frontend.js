@@ -83,7 +83,37 @@ function onNewPollAdded(data) {
  *
  * @param {*} data The data from the server (probably containing which poll was updated and the new vote values for that poll)
  */
-function onIncomingVote(data) {}
+function onIncomingVote(data) {
+  if (!data.poll || !data.poll._id || !data.poll.options) {
+    console.error("Unable to receive votes: ", data);
+    return;
+  }
+
+  const pollId = data.poll._id;
+  const updatedOptions = data.poll.options;
+
+  const pollElement = document.getElementById(pollId);
+  if (!pollElement) {
+    console.error(`Poll with ID ${pollId} not found.`);
+    return;
+  }
+
+  optionElement.forEach((optionElement) => {
+    const optionAnswer = optionElement
+      .querySelector("strong")
+      .textContent.trim();
+  });
+
+  const updatedOption = updatedOptions.find(
+    (opt) => opt.answer === optionAnswer
+  );
+
+  if (updatedOption) {
+    optionElement.innerHTML = `${optionAnswer}: ${updatedOption.votes} votes`;
+  } else {
+    console.warn(`Option with answer "${optionAnswer}" not found.`);
+  }
+}
 
 /**
  * Handles processing a user's vote when they click on an option to vote
