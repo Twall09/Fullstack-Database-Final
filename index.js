@@ -89,20 +89,20 @@ app.get("/login", async (request, response) => {
 
 app.post("/login", async (request, response) => {
   const { username, password } = request.body;
-  const user = await User.findOne({ username });
+  const user = await User.findOne({ username, password });
 
-  if (user && (await bcrypt.compare(password, user.password))) {
-    request.session.user = { id: user._id, username: user.username };
+  if (user) {
+    request.session.user = { id: user.id, username: user.username }; // Store the user
+    console.log("User logged in: ", request.session.user);
     return response.redirect("/authenticated");
+  } else {
+    return response.render("login", { errorMessage: "Invalid credentials" });
   }
-  response.render("login", {
-    errorMessage: "Invaklid username or password. Try again.",
-  });
 });
 
 app.get("/signup", async (request, response) => {
   if (request.session.user?.id) {
-    return response.redirect("/authenticated"); // all these mean return to dashboard
+    return response.redirect("/authenticated"); // all these mean return to authenticated page
   }
 
   return response.render("signup", { errorMessage: null });
@@ -127,18 +127,21 @@ app.post("/signup", async (request, response) => {
 
 app.post("/logout", (request, response) => {
   request.session.destroy(() => {
+    console.log("User logged out!");
     response.redirect("/"); // ends your session and brings you to home page
   });
 });
 
 app.get("/authenticated", async (request, response) => {
-  if (!request.session.user?.id) {
+  console.log("Session: ", request.session);
+  console.log("User: ", request.session.user);
+  if (!request.session.user) {
     return response.redirect("/login");
   }
 
   const polls = await Poll.find();
 
-  response.render("index/authenticatedIndex", {
+  response.render("authenticatedIndex", {
     user: request.session.user, // should pass 'user' so u can view nav links in header.ejs
     polls: polls || [],
   });
