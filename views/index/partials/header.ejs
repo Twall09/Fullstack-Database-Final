@@ -1,16 +1,14 @@
 <header>
   <nav>
-    <% if (user) { %>
     <a href="/authenticated">Home</a>
     <a href="/profile">Profile</a>
     <a href="/createPoll">Create Poll</a>
 
-    <form method="post" action="/logout">
-      <button type="submit">Logout</button>
-    </form>
-    <% } else { %>
     <a href="/login">Login</a>
     <a href="/signup">Sign Up</a>
-    <% } %>
   </nav>
+
+  <form method="post" action="/logout">
+    <button type="submit">Logout</button>
+  </form>
 </header>

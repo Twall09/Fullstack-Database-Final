@@ -6,6 +6,7 @@ const session = require("express-session");
 const bcrypt = require("bcrypt");
 
 const PORT = 3000;
+const saltRounds = 10;
 //TODO: Update this URI to match your own MongoDB setup
 const MONGO_URI = "mongodb://localhost:27017/keyin_test";
 const app = express();
@@ -89,14 +90,16 @@ app.get("/login", async (request, response) => {
 
 app.post("/login", async (request, response) => {
   const { username, password } = request.body;
-  const user = await User.findOne({ username, password });
+  const user = await User.findOne({ username });
 
-  if (user) {
-    request.session.user = { id: user.id, username: user.username }; // Store the user
+  if (user && (await bcrypt.compare(password, user.password))) {
+    request.session.user = { id: user.id, username: user.username };
     console.log("User logged in: ", request.session.user);
     return response.redirect("/authenticated");
   } else {
-    return response.render("login", { errorMessage: "Invalid credentials" });
+    return response.render("login", {
+      errorMessage: "Invalid login stuff broo",
+    });
   }
 });
 
@@ -112,7 +115,7 @@ app.post("/signup", async (request, response) => {
   const { username, password } = request.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
     const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
     response.redirect("/login");
